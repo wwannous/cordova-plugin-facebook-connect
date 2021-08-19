@@ -10,7 +10,6 @@ When creating a Github issue **remember to**:
 
 ### Troubleshooting contents
 - [**General**](#general)
-	- [How do I Build without Eclipse?](#how-do-i-build-without-eclipse)
 	- [How do I Add a Like Button?](#how-do-i-add-a-like-button)
 	- [Where is the init API?](#where-is-the-init-api)
 
@@ -27,11 +26,6 @@ When creating a Github issue **remember to**:
     - [Login fails with devices running iOS 10+](#login-fails-with-devices-running-ios-10)
 
 ## General
-### How do I Build without Eclipse?
-
-- Solution
-    - Check the [Android Guide](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/blob/master/docs/android/README.md)
-
 ### How do I Add a Like Button?
 
 - Problem
