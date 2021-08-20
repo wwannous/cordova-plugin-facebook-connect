@@ -99,19 +99,6 @@ try {
 
 You should **not** use the openssl-0.9.8k_X64.zip.
 
-### Jar mismatch! Fix your dependencies
-
-- Problem
-    - I get this error:
-
-```
-BUILD FAILED
-/usr/local/opt/android-sdk/tools/ant/build.xml:577: Jar mismatch! Fix your dependencies
-```
-
-- Solution
-    - You may have duplicate android-support-v4.jar files. Remove android-support-v4.jar from the `/libs` folder of your project.
-
 ### Open Fullscreen Dialog in Landscape Orientation
 - Problem:
     - In landscape orientation the dialog is too small to use keyboard input
