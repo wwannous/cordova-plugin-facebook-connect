@@ -469,15 +469,25 @@
 
     } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"feed"]) {
         // Create native params
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        content.contentURL = [NSURL URLWithString:params[@"href"]];
-        content.hashtag = [FBSDKHashtag hashtagWithString:[params objectForKey:@"hashtag"]];
-        content.quote = params[@"quote"];
-
         self.dialogCallbackId = command.callbackId;
         FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
         dialog.fromViewController = [self topMostController];
-        dialog.shareContent = content;
+        if (params[@"photo_image"]) {
+        	FBSDKSharePhoto *photo = [[FBSDKSharePhoto alloc] init];
+        	NSString *photoImage = params[@"photo_image"];
+        	NSData *photoImageData = [[NSData alloc]initWithBase64EncodedString:photoImage options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        	photo.image = [UIImage imageWithData:photoImageData];
+        	photo.userGenerated = YES;
+        	FBSDKSharePhotoContent *content = [[FBSDKSharePhotoContent alloc] init];
+        	content.photos = @[photo];
+        	dialog.shareContent = content;
+        } else {
+        	FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+        	content.contentURL = [NSURL URLWithString:params[@"href"]];
+        	content.hashtag = [FBSDKHashtag hashtagWithString:[params objectForKey:@"hashtag"]];
+        	content.quote = params[@"quote"];
+        	dialog.shareContent = content;
+        }
         dialog.delegate = self;
         // Adopt native share sheets with the following line
         if (params[@"share_sheet"]) {

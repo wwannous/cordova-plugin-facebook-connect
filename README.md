@@ -239,6 +239,36 @@ Share Dialog:
 
 The default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
 
+Share Photo Dialog:
+
+	{
+		method: "share",
+		photo_image: "/9j/4TIERXhpZgAATU0AKgAAAA..."
+	}
+
+*photo_image* must be a Base64-encoded string, such as a value returned by [cordova-plugin-camera](https://www.npmjs.com/package/cordova-plugin-camera) or [cordova-plugin-file](https://www.npmjs.com/package/cordova-plugin-file). Note that you must provide only the Base64 data, so if you have a data URL returned by something like `FileReader` that looks like "data:image/jpeg;base64,/9j/4TIERXhpZgAATU0AKgAAAA...", you should split on ";base64,", e.g. `myDataUrl.split(';base64,')[1]`.
+
+Here's a basic example using the camera plugin:
+
+```
+navigator.camera.getPicture(function(dataUrl) {
+  facebookConnectPlugin.showDialog({
+    method: 'share', 
+    photo_image: dataUrl
+  }, function() {
+    console.log('share success');
+  }, function(e) {
+    console.log('share error', e);
+  });
+}, function(e) {
+  console.log('camera error', e);
+}, {
+  quality: 100, 
+  sourceType: Camera.PictureSourceType.CAMERA, 
+  destinationType: Camera.DestinationType.DATA_URL
+});
+```
+
 Game request:
 
 	{
