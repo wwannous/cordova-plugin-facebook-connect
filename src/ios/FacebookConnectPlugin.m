@@ -475,10 +475,18 @@
         if (params[@"photo_image"]) {
         	FBSDKSharePhoto *photo = [[FBSDKSharePhoto alloc] init];
         	NSString *photoImage = params[@"photo_image"];
-        	NSData *photoImageData = [[NSData alloc]initWithBase64EncodedString:photoImage options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        	photo.image = [UIImage imageWithData:photoImageData];
-        	photo.userGenerated = YES;
-        	FBSDKSharePhotoContent *content = [[FBSDKSharePhotoContent alloc] init];
+        	if (![photoImage isKindOfClass:[NSString class]]) {
+        		NSLog(@"photo_image is not a string");
+        	} else {
+        		NSData *photoImageData = [[NSData alloc]initWithBase64EncodedString:photoImage options:NSDataBase64DecodingIgnoreUnknownCharacters];
+        		if (!photoImageData) {
+        			NSLog(@"photo_image cannot be decoded");
+        		} else {
+        			photo.image = [UIImage imageWithData:photoImageData];
+        			photo.userGenerated = YES;
+        		}
+        	}
+          FBSDKSharePhotoContent *content = [[FBSDKSharePhotoContent alloc] init];
         	content.photos = @[photo];
         	dialog.shareContent = content;
         } else {

@@ -793,9 +793,18 @@ public class ConnectPlugin extends CordovaPlugin {
 
     private SharePhotoContent buildPhotoContent(Map<String, String> paramBundle) {
         SharePhoto.Builder photoBuilder = new SharePhoto.Builder();
-        byte[] photoImageData = Base64.decode(paramBundle.get("photo_image"), Base64.DEFAULT);
-        Bitmap image = BitmapFactory.decodeByteArray(photoImageData, 0, photoImageData.length); 
-        SharePhoto photo = photoBuilder.setBitmap(image).setUserGenerated(true).build();
+        if (!(paramBundle.get("photo_image") instanceof String)) {
+            Log.d(TAG, "photo_image is not a string");
+        } else {
+            try {
+                byte[] photoImageData = Base64.decode(paramBundle.get("photo_image"), Base64.DEFAULT);
+                Bitmap image = BitmapFactory.decodeByteArray(photoImageData, 0, photoImageData.length); 
+                photoBuilder.setBitmap(image).setUserGenerated(true);
+            } catch (Exception e) {
+                Log.d(TAG, "photo_image cannot be decoded");
+            }
+        }
+        SharePhoto photo = photoBuilder.build();
         SharePhotoContent.Builder photoContentBuilder = new SharePhotoContent.Builder();
         photoContentBuilder.addPhoto(photo);
 
