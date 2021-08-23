@@ -69,6 +69,10 @@ exports.setUserData = function (userData, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'setUserData', [userData])
 }
 
+exports.clearUserData = function (s, f) {
+  exec(s, f, 'FacebookConnectPlugin', 'clearUserData', [])
+}
+
 exports.logEvent = function (name, params, valueToSum, s, f) {
   // Prevent NSNulls getting into iOS, messes up our [command.argument count]
   if (!params && !valueToSum) {

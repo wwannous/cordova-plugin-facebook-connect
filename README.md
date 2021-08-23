@@ -292,6 +292,7 @@ Send Dialog:
 For options information see: [Facebook share dialog documentation](https://developers.facebook.com/docs/sharing/reference/share-dialog) [Facebook send dialog documentation](https://developers.facebook.com/docs/sharing/reference/send-dialog)
 
 Success function returns an Object or `from` and `to` information when doing `apprequest`.
+
 Failure function returns an error String.
 
 ### The Graph API
@@ -370,6 +371,16 @@ Example user data object:
 		"zp": "94025", //zip code
 		"cn": "us" //country
 	}
+
+Success function indicates the user data has been set.
+
+Failure function returns an error String.
+
+`clearUserData(Function success, Function failure)`
+
+Success function indicates the user data has been cleared.
+
+Failure function returns an error String.
 
 ### Login
 

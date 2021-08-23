@@ -337,6 +337,10 @@ public class ConnectPlugin extends CordovaPlugin {
             executeSetUserData(args, callbackContext);
             return true;
 
+        } else if (action.equals("clearUserData")) {
+            executeClearUserData(args, callbackContext);
+            return true;
+
         } else if (action.equals("logEvent")) {
             executeLogEvent(args, callbackContext);
             return true;
@@ -646,6 +650,11 @@ public class ConnectPlugin extends CordovaPlugin {
         }
 
         logger.setUserData(params.get("em"), params.get("fn"), params.get("ln"), params.get("ph"), params.get("db"), params.get("ge"), params.get("ct"), params.get("st"), params.get("zp"), params.get("cn"));
+        callbackContext.success();
+    }
+
+    private void executeClearUserData(JSONArray args, CallbackContext callbackContext) {
+        logger.clearUserData();
         callbackContext.success();
     }
 

@@ -210,6 +210,12 @@
     }];
 }
 
+- (void)clearUserData:(CDVInvokedUrlCommand *)command {
+    [FBSDKAppEvents clearUserData];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)logEvent:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments

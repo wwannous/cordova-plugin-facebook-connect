@@ -27,6 +27,7 @@
 - (void)setAdvertiserIDCollectionEnabled:(CDVInvokedUrlCommand *)command;
 - (void)setAdvertiserTrackingEnabled:(CDVInvokedUrlCommand *)command;
 - (void)setUserData:(CDVInvokedUrlCommand *)command;
+- (void)clearUserData:(CDVInvokedUrlCommand *)command;
 - (void)logEvent:(CDVInvokedUrlCommand *)command;
 - (void)logPurchase:(CDVInvokedUrlCommand *)command;
 - (void)login:(CDVInvokedUrlCommand *)command;
