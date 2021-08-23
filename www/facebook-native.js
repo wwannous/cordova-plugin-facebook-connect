@@ -65,6 +65,10 @@ exports.setAdvertiserTrackingEnabled = function (enabled, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'setAdvertiserTrackingEnabled', [enabled]);
 }
 
+exports.setUserData = function (userData, s, f) {
+  exec(s, f, 'FacebookConnectPlugin', 'setUserData', [userData])
+}
+
 exports.logEvent = function (name, params, valueToSum, s, f) {
   // Prevent NSNulls getting into iOS, messes up our [command.argument count]
   if (!params && !valueToSum) {

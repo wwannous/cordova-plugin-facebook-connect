@@ -177,6 +177,39 @@
     [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
 }
 
+- (void)setUserData:(CDVInvokedUrlCommand *)command {
+    if ([command.arguments count] == 0) {
+        // Not enough arguments
+        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        return;
+    }
+
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *params = [command.arguments objectAtIndex:0];
+
+        if (![params isKindOfClass:[NSDictionary class]]) {
+            CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"userData must be an object"];
+            [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+            return;
+        } else {
+            [FBSDKAppEvents setUserEmail:(NSString *)params[@"em"] 
+                            firstName:(NSString*)params[@"fn"] 
+                            lastName:(NSString *)params[@"ln"] 
+                            phone:(NSString *)params[@"ph"] 
+                            dateOfBirth:(NSString *)params[@"db"] 
+                            gender:(NSString *)params[@"ge"] 
+                            city:(NSString *)params[@"ct"] 
+                            state:(NSString *)params[@"st"] 
+                            zip:(NSString *)params[@"zp"] 
+                            country:(NSString *)params[@"cn"]];
+        }
+
+        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    }];
+}
+
 - (void)logEvent:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments

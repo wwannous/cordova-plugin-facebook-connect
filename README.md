@@ -348,6 +348,29 @@ Events are listed on the [insights page](https://www.facebook.com/insights/)
 
 `activateApp(Function success, Function failure)`
 
+#### Advanced Matching
+
+With [Advanced Matching](https://developers.facebook.com/docs/app-events/advanced-matching/), Facebook can match conversion events to your customers to optimize your ads and build larger re-marketing audiences.
+
+`setUserData(Object userData, Function success, Function failure)`
+
+- **userData**, an object containing the user data to use for matching
+
+Example user data object:
+
+	{
+		"em": "jsmith@example.com", //email
+		"fn": "john", //first name
+		"ln": "smith", //last name
+		"ph", "16505554444", //phone number
+		"db": "19910526", //birthdate
+		"ge": "f", //gender
+		"ct": "menlopark", //city
+		"st": "ca", //state
+		"zp": "94025", //zip code
+		"cn": "us" //country
+	}
+
 ### Login
 
 In your `onDeviceReady` event add the following

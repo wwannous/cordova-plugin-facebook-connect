@@ -330,8 +330,12 @@ public class ConnectPlugin extends CordovaPlugin {
             return true;
 
         } else if(action.equals("setAdvertiserIDCollectionEnabled")) {
-          executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
-          return true;
+            executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
+            return true;
+
+        } else if (action.equals("setUserData")) {
+            executeSetUserData(args, callbackContext);
+            return true;
 
         } else if (action.equals("logEvent")) {
             executeLogEvent(args, callbackContext);
@@ -611,6 +615,37 @@ public class ConnectPlugin extends CordovaPlugin {
     private void executeSetAdvertiserIDCollectionEnabled(JSONArray args, CallbackContext callbackContext) {
         boolean enabled = args.optBoolean(0);
         FacebookSdk.setAdvertiserIDCollectionEnabled(enabled);
+        callbackContext.success();
+    }
+
+    private void executeSetUserData(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (args.length() == 0) {
+            // Not enough parameters
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        Map<String, String> params = new HashMap<String, String>();
+        JSONObject parameters;
+
+        try {
+            parameters = args.getJSONObject(0);
+        } catch (JSONException e) {
+            callbackContext.error("userData must be an object");
+            return;
+        }
+
+        Iterator<String> iter = parameters.keys();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            try {
+                params.put(key, parameters.getString(key));
+            } catch (JSONException e) {
+                Log.w(TAG, "Non-string parameter provided to setUserData discarded");
+            }
+        }
+
+        logger.setUserData(params.get("em"), params.get("fn"), params.get("ln"), params.get("ph"), params.get("db"), params.get("ge"), params.get("ct"), params.get("st"), params.get("zp"), params.get("cn"));
         callbackContext.success();
     }
 
