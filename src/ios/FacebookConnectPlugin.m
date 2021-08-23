@@ -509,7 +509,7 @@
         	FBSDKSharePhoto *photo = [[FBSDKSharePhoto alloc] init];
         	NSString *photoImage = params[@"photo_image"];
         	if (![photoImage isKindOfClass:[NSString class]]) {
-        		NSLog(@"photo_image is not a string");
+        		NSLog(@"photo_image must be a string");
         	} else {
         		NSData *photoImageData = [[NSData alloc]initWithBase64EncodedString:photoImage options:NSDataBase64DecodingIgnoreUnknownCharacters];
         		if (!photoImageData) {
