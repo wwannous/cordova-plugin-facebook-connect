@@ -177,6 +177,26 @@
     [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
 }
 
+- (void)setDataProcessingOptions:(CDVInvokedUrlCommand *)command {
+    if ([command.arguments count] == 0) {
+        // Not enough arguments
+        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        return;
+    }
+
+    NSArray *options = [command argumentAtIndex:0];
+    if ([command.arguments count] == 1) {
+        [FBSDKSettings setDataProcessingOptions:options];
+    } else {
+        NSString *country = [command.arguments objectAtIndex:1];
+        NSString *state = [command.arguments objectAtIndex:2];
+        [FBSDKSettings setDataProcessingOptions:options country:country state:state];  
+    }
+    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+}
+
 - (void)setUserData:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments

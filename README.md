@@ -250,7 +250,7 @@ Share Photo Dialog:
 
 Here's a basic example using the camera plugin:
 
-```
+```js
 navigator.camera.getPicture(function(dataUrl) {
   facebookConnectPlugin.showDialog({
     method: 'share', 
@@ -348,6 +348,44 @@ Events are listed on the [insights page](https://www.facebook.com/insights/)
 #### Manually log activation events
 
 `activateApp(Function success, Function failure)`
+
+#### Data Processing Options
+
+This plugin allows developers to set Data Processing Options as part of compliance with the California Consumer Privacy Act (CCPA).
+
+`setDataProcessingOptions(Array strings of options, String country, String state, Function success, Function failure)`
+
+To explicitly not enable Limited Data Use (LDU) mode, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions([], null, null, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+To enable LDU with geolocation, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions(["LDU"], 0, 0, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+To enable LDU for users and specify user geography, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions(["LDU"], 1, 1000, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+For more information see: [Facebook Documentation](https://developers.facebook.com/docs/app-events/guides/ccpa)
 
 #### Advanced Matching
 
@@ -468,7 +506,7 @@ Please check [this repo](https://github.com/msencer/fb_hybrid_app_events_sample)
 
 ## GDPR Compliance
 
-This Plugin supports Facebook's [GDPR Compliance](https://developers.facebook.com/docs/app-events/gdpr-compliance/) **Delaying Automatic Event Collection**.
+This plugin supports Facebook's [GDPR Compliance](https://developers.facebook.com/docs/app-events/gdpr-compliance/) **Delaying Automatic Event Collection**.
 
 In order to enable this feature in your Cordova app, please set the *FACEBOOK_AUTO_LOG_APP_EVENTS* variable to "false" (default is true).
 

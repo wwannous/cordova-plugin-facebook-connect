@@ -333,6 +333,10 @@ public class ConnectPlugin extends CordovaPlugin {
             executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
             return true;
 
+        } else if(action.equals("setDataProcessingOptions")) {
+            executeSetDataProcessingOptions(args, callbackContext);
+            return true;
+
         } else if (action.equals("setUserData")) {
             executeSetUserData(args, callbackContext);
             return true;
@@ -619,6 +623,29 @@ public class ConnectPlugin extends CordovaPlugin {
     private void executeSetAdvertiserIDCollectionEnabled(JSONArray args, CallbackContext callbackContext) {
         boolean enabled = args.optBoolean(0);
         FacebookSdk.setAdvertiserIDCollectionEnabled(enabled);
+        callbackContext.success();
+    }
+
+    private void executeSetDataProcessingOptions(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (args.length() == 0) {
+            // Not enough parameters
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        JSONArray arr = args.getJSONArray(0);
+        String[] options = new String[arr.length()];
+        for (int i = 0; i < arr.length(); i++) {
+            options[i + 1] = arr.getString(i);
+        }
+
+        if (args.length() == 1) {
+            FacebookSdk.setDataProcessingOptions(options);
+        } else {
+            String country = args.getString(1);
+            String state = args.getString(2);
+            FacebookSdk.setDataProcessingOptions(options);
+        }
         callbackContext.success();
     }
 
