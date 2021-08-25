@@ -556,6 +556,27 @@ facebookConnectPlugin.setAdvertiserTrackingEnabled(true, function() {
 
 See the [Facebook Developer documentation](https://developers.facebook.com/docs/app-events/guides/advertising-tracking-enabled/) for more details.
 
+## App Ads and Deep Links
+
+`getDeferredApplink(Function success, Function failure)`
+
+Success function returns the deep link if one is defined.
+
+Failure function returns an error String.
+
+Note that on iOS, you must use a plugin such as [cordova-plugin-idfa](https://www.npmjs.com/package/cordova-plugin-idfa) to first request tracking permission from the user, then call the `setAdvertiserTrackingEnabled` method to enable advertiser tracking. Attempting to call `getDeferredApplink` without doing so will result in an empty string being returned.
+
+```js
+cordova.plugins.idfa.requestPermission().then(function() {
+  facebookConnectPlugin.setAdvertiserTrackingEnabled(true);
+  facebookConnectPlugin.getDeferredApplink(function(url) {
+    console.log('url = ' + url);
+  });
+});
+```
+
+See the [Facebook Developer documentation](https://developers.facebook.com/docs/app-ads/deep-linking/) for more details.
+
 ## URL Suffixes for Multiple Apps
 
 When using the same Facebook app with multiple iOS apps, use the *FACEBOOK_URL_SCHEME_SUFFIX* variable to set a unique URL Suffix for each app. This ensures that Facebook redirects back to the correct app after closing the login window.
