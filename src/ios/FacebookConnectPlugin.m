@@ -86,8 +86,7 @@
 - (void)setApplicationId:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
     
@@ -105,8 +104,7 @@
 - (void)setApplicationName:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
     
@@ -175,8 +173,7 @@
 - (void)setDataProcessingOptions:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
 
@@ -194,8 +191,7 @@
 - (void)setUserData:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
 
@@ -231,8 +227,7 @@
 - (void)logEvent:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] == 0) {
         // Not enough arguments
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
 
@@ -266,8 +261,7 @@
 
 - (void)logPurchase:(CDVInvokedUrlCommand *)command {
     if ([command.arguments count] < 2 || [command.arguments count] > 3 ) {
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnInvalidArgsError:command.callbackId];
         return;
     }
 
@@ -747,6 +741,11 @@
 - (void) returnGenericSuccess:(NSString *)callbackId {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) returnInvalidArgsError:(NSString *)callbackId {
+    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
 }
 
 - (void) returnLoginError:(NSString *)callbackId:(NSString *)errorCode:(NSString *)errorMessage {
