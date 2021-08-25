@@ -1,3 +1,20 @@
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/releases/tag/v3.1.0) (2021-09-07)
+
+## Features
+
+* Updated the `showDialog` method to allow for sharing photos (closes [#54](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/54))
+* Added new `setDataProcessingOptions` method to allow for setting Data Processing Options as part of compliance with the California Consumer Privacy Act (CCPA) (closes [#57](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/57))
+* Added new `setUserData` and `clearUserData` methods to enable the use of Advanced Matching (closes [#56](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/56))
+
+## Bug Fixes
+
+* Fixed an issue that would cause Facebook dialogs to open in a webview on Android (closes [#81](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/81))
+
+## Documentation
+
+* Updated README to document the `getDeferredApplink` method, and the process necessary to use it on iOS (closes [#42](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/42))
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/releases/tag/v3.0.0) (2021-08-17)
 
