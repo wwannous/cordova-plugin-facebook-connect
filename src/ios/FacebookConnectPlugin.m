@@ -93,8 +93,7 @@
     
     NSString *appId = [command argumentAtIndex:0];
     [FBSDKSettings setAppID:appId];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)getApplicationName:(CDVInvokedUrlCommand *)command {
@@ -113,8 +112,7 @@
     
     NSString *displayName = [command argumentAtIndex:0];
     [FBSDKSettings setDisplayName:displayName];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)getLoginStatus:(CDVInvokedUrlCommand *)command {
@@ -159,22 +157,19 @@
 - (void)setAutoLogAppEventsEnabled:(CDVInvokedUrlCommand *)command {
     BOOL enabled = [[command argumentAtIndex:0] boolValue];
     [FBSDKSettings setAutoLogAppEventsEnabled:enabled];
-    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)setAdvertiserIDCollectionEnabled:(CDVInvokedUrlCommand *)command {
     BOOL enabled = [[command argumentAtIndex:0] boolValue];
     [FBSDKSettings setAdvertiserIDCollectionEnabled:enabled];
-    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)setAdvertiserTrackingEnabled:(CDVInvokedUrlCommand *)command {
     BOOL enabled = [[command argumentAtIndex:0] boolValue];
     [FBSDKSettings setAdvertiserTrackingEnabled:enabled];
-    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)setDataProcessingOptions:(CDVInvokedUrlCommand *)command {
@@ -193,8 +188,7 @@
         NSString *state = [command.arguments objectAtIndex:2];
         [FBSDKSettings setDataProcessingOptions:options country:country state:state];  
     }
-    CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)setUserData:(CDVInvokedUrlCommand *)command {
@@ -225,15 +219,13 @@
                             country:(NSString *)params[@"cn"]];
         }
 
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnGenericSuccess:command.callbackId];
     }];
 }
 
 - (void)clearUserData:(CDVInvokedUrlCommand *)command {
     [FBSDKAppEvents clearUserData];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void)logEvent:(CDVInvokedUrlCommand *)command {
@@ -248,7 +240,6 @@
         // For more verbose output on logging uncomment the following:
         // [FBSettings setLoggingBehavior:[NSSet setWithObject:FBLoggingBehaviorAppEvents]];
         NSString *eventName = [command.arguments objectAtIndex:0];
-        CDVPluginResult *res;
         NSDictionary *params;
         double value;
 
@@ -269,8 +260,7 @@
                 [FBSDKAppEvents logEvent:eventName valueToSum:value parameters:params];
             }
         }
-        res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnGenericSuccess:command.callbackId];
     }];
 }
 
@@ -292,8 +282,7 @@
             [FBSDKAppEvents logPurchase:value currency:currency parameters:params];
         }
 
-        CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        [self returnGenericSuccess:command.callbackId];
     }];
 }
 
@@ -488,8 +477,7 @@
     }
 
     // Else just return OK we are already logged out
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 - (void) showDialog:(CDVInvokedUrlCommand*)command
@@ -743,8 +731,7 @@
             CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: url.absoluteString];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } else {
-            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            [self returnGenericSuccess:command.callbackId];
         }
     }];
 }
@@ -752,11 +739,15 @@
 - (void) activateApp:(CDVInvokedUrlCommand *)command
 {
     [FBSDKAppEvents activateApp];
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self returnGenericSuccess:command.callbackId];
 }
 
 #pragma mark - Utility methods
+
+- (void) returnGenericSuccess:(NSString *)callbackId {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 
 - (void) returnLoginError:(NSString *)callbackId:(NSString *)errorCode:(NSString *)errorMessage {
     NSMutableDictionary *response = [[NSMutableDictionary alloc] init];
