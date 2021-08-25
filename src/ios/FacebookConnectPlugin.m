@@ -527,7 +527,7 @@
         			photo.userGenerated = YES;
         		}
         	}
-          FBSDKSharePhotoContent *content = [[FBSDKSharePhotoContent alloc] init];
+        	FBSDKSharePhotoContent *content = [[FBSDKSharePhotoContent alloc] init];
         	content.photos = @[photo];
         	dialog.shareContent = content;
         } else {
