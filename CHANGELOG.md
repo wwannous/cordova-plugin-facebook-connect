@@ -9,6 +9,7 @@
 
 ## Bug Fixes
 
+* Fixed an issue that could break the Cordova resume event on Android, which in turn could cause problems with elements like `<input type="file" />` (closes [#68](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/68))
 * Fixed an issue that would cause Facebook dialogs to open in a webview on Android (closes [#81](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/81))
 
 ## Documentation
