@@ -722,7 +722,7 @@
             return;
         }
         if (url) {
-            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: url.absoluteString];
+            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:url.absoluteString];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } else {
             [self returnGenericSuccess:command.callbackId];
@@ -740,12 +740,12 @@
 
 - (void) returnGenericSuccess:(NSString *)callbackId {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void) returnInvalidArgsError:(NSString *)callbackId {
     CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:res callbackId:callbackId];
 }
 
 - (void) returnLoginError:(NSString *)callbackId:(NSString *)errorCode:(NSString *)errorMessage {
