@@ -3,8 +3,11 @@ package org.apache.cordova.facebook;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -30,6 +33,8 @@ import com.facebook.share.Sharer;
 import com.facebook.share.model.GameRequestContent;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.MessageDialog;
 import com.facebook.share.widget.ShareDialog;
@@ -90,9 +95,6 @@ public class ConnectPlugin extends CordovaPlugin {
 
         // augment web view to enable hybrid app events
         enableHybridAppEvents();
-
-        // Set up the activity result callback to this class
-        cordova.setActivityResultCallback(this);
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -325,8 +327,20 @@ public class ConnectPlugin extends CordovaPlugin {
             return true;
 
         } else if(action.equals("setAdvertiserIDCollectionEnabled")) {
-          executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
-          return true;
+            executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
+            return true;
+
+        } else if(action.equals("setDataProcessingOptions")) {
+            executeSetDataProcessingOptions(args, callbackContext);
+            return true;
+
+        } else if (action.equals("setUserData")) {
+            executeSetUserData(args, callbackContext);
+            return true;
+
+        } else if (action.equals("clearUserData")) {
+            executeClearUserData(args, callbackContext);
+            return true;
 
         } else if (action.equals("logEvent")) {
             executeLogEvent(args, callbackContext);
@@ -494,7 +508,7 @@ public class ConnectPlugin extends CordovaPlugin {
             gameRequestDialog.show(builder.build());
 
         } else if (method.equalsIgnoreCase("share") || method.equalsIgnoreCase("feed")) {
-            if (!ShareDialog.canShow(ShareLinkContent.class)) {
+            if ((params.containsKey("photo_image") && !ShareDialog.canShow(SharePhotoContent.class)) || (!params.containsKey("photo_image") && !ShareDialog.canShow(ShareLinkContent.class))) {
                 callbackContext.error("Cannot show dialog");
                 return;
             }
@@ -503,10 +517,15 @@ public class ConnectPlugin extends CordovaPlugin {
             pr.setKeepCallback(true);
             showDialogContext.sendPluginResult(pr);
 
-            ShareLinkContent content = buildContent(params);
             // Set up the activity result callback to this class
             cordova.setActivityResultCallback(this);
-            shareDialog.show(content);
+            if (params.containsKey("photo_image")) {
+                SharePhotoContent content = buildPhotoContent(params);
+                shareDialog.show(content);
+            } else {
+                ShareLinkContent content = buildLinkContent(params);
+                shareDialog.show(content);
+            }
 
         } else if (method.equalsIgnoreCase("send")) {
             if (!MessageDialog.canShow(ShareLinkContent.class)) {
@@ -601,6 +620,65 @@ public class ConnectPlugin extends CordovaPlugin {
     private void executeSetAdvertiserIDCollectionEnabled(JSONArray args, CallbackContext callbackContext) {
         boolean enabled = args.optBoolean(0);
         FacebookSdk.setAdvertiserIDCollectionEnabled(enabled);
+        callbackContext.success();
+    }
+
+    private void executeSetDataProcessingOptions(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (args.length() == 0) {
+            // Not enough parameters
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        JSONArray arr = args.getJSONArray(0);
+        String[] options = new String[arr.length()];
+        for (int i = 0; i < arr.length(); i++) {
+            options[i + 1] = arr.getString(i);
+        }
+
+        if (args.length() == 1) {
+            FacebookSdk.setDataProcessingOptions(options);
+        } else {
+            String country = args.getString(1);
+            String state = args.getString(2);
+            FacebookSdk.setDataProcessingOptions(options);
+        }
+        callbackContext.success();
+    }
+
+    private void executeSetUserData(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (args.length() == 0) {
+            // Not enough parameters
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        Map<String, String> params = new HashMap<String, String>();
+        JSONObject parameters;
+
+        try {
+            parameters = args.getJSONObject(0);
+        } catch (JSONException e) {
+            callbackContext.error("userData must be an object");
+            return;
+        }
+
+        Iterator<String> iter = parameters.keys();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            try {
+                params.put(key, parameters.getString(key));
+            } catch (JSONException e) {
+                Log.w(TAG, "Non-string parameter provided to setUserData discarded");
+            }
+        }
+
+        logger.setUserData(params.get("em"), params.get("fn"), params.get("ln"), params.get("ph"), params.get("db"), params.get("ge"), params.get("ct"), params.get("st"), params.get("zp"), params.get("cn"));
+        callbackContext.success();
+    }
+
+    private void executeClearUserData(JSONArray args, CallbackContext callbackContext) {
+        logger.clearUserData();
         callbackContext.success();
     }
 
@@ -781,7 +859,27 @@ public class ConnectPlugin extends CordovaPlugin {
         }
     }
 
-    private ShareLinkContent buildContent(Map<String, String> paramBundle) {
+    private SharePhotoContent buildPhotoContent(Map<String, String> paramBundle) {
+        SharePhoto.Builder photoBuilder = new SharePhoto.Builder();
+        if (!(paramBundle.get("photo_image") instanceof String)) {
+            Log.d(TAG, "photo_image must be a string");
+        } else {
+            try {
+                byte[] photoImageData = Base64.decode(paramBundle.get("photo_image"), Base64.DEFAULT);
+                Bitmap image = BitmapFactory.decodeByteArray(photoImageData, 0, photoImageData.length); 
+                photoBuilder.setBitmap(image).setUserGenerated(true);
+            } catch (Exception e) {
+                Log.d(TAG, "photo_image cannot be decoded");
+            }
+        }
+        SharePhoto photo = photoBuilder.build();
+        SharePhotoContent.Builder photoContentBuilder = new SharePhotoContent.Builder();
+        photoContentBuilder.addPhoto(photo);
+
+        return photoContentBuilder.build();
+    }
+
+    private ShareLinkContent buildLinkContent(Map<String, String> paramBundle) {
         ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
         if (paramBundle.containsKey("href"))
             builder.setContentUrl(Uri.parse(paramBundle.get("href")));

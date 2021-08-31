@@ -239,6 +239,36 @@ Share Dialog:
 
 The default dialog mode is [`FBSDKShareDialogModeAutomatic`](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/). You can share that by adding a specific dialog mode parameter. The available share dialog modes are: `share_sheet`, `share_feedBrowser`, `share_native` and `share_feedWeb`. [Read more about share dialog modes](https://developers.facebook.com/docs/reference/ios/current/constants/FBSDKShareDialogMode/)
 
+Share Photo Dialog:
+
+	{
+		method: "share",
+		photo_image: "/9j/4TIERXhpZgAATU0AKgAAAA..."
+	}
+
+*photo_image* must be a Base64-encoded string, such as a value returned by [cordova-plugin-camera](https://www.npmjs.com/package/cordova-plugin-camera) or [cordova-plugin-file](https://www.npmjs.com/package/cordova-plugin-file). Note that you must provide only the Base64 data, so if you have a data URL returned by something like `FileReader` that looks like "data:image/jpeg;base64,/9j/4TIERXhpZgAATU0AKgAAAA...", you should split on ";base64,", e.g. `myDataUrl.split(';base64,')[1]`.
+
+Here's a basic example using the camera plugin:
+
+```js
+navigator.camera.getPicture(function(dataUrl) {
+  facebookConnectPlugin.showDialog({
+    method: 'share', 
+    photo_image: dataUrl
+  }, function() {
+    console.log('share success');
+  }, function(e) {
+    console.log('share error', e);
+  });
+}, function(e) {
+  console.log('camera error', e);
+}, {
+  quality: 100, 
+  sourceType: Camera.PictureSourceType.CAMERA, 
+  destinationType: Camera.DestinationType.DATA_URL
+});
+```
+
 Game request:
 
 	{
@@ -262,6 +292,7 @@ Send Dialog:
 For options information see: [Facebook share dialog documentation](https://developers.facebook.com/docs/sharing/reference/share-dialog) [Facebook send dialog documentation](https://developers.facebook.com/docs/sharing/reference/send-dialog)
 
 Success function returns an Object or `from` and `to` information when doing `apprequest`.
+
 Failure function returns an error String.
 
 ### The Graph API
@@ -317,6 +348,77 @@ Events are listed on the [insights page](https://www.facebook.com/insights/)
 #### Manually log activation events
 
 `activateApp(Function success, Function failure)`
+
+#### Data Processing Options
+
+This plugin allows developers to set Data Processing Options as part of compliance with the California Consumer Privacy Act (CCPA).
+
+`setDataProcessingOptions(Array strings of options, String country, String state, Function success, Function failure)`
+
+To explicitly not enable Limited Data Use (LDU) mode, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions([], null, null, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+To enable LDU with geolocation, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions(["LDU"], 0, 0, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+To enable LDU for users and specify user geography, use:
+
+```js
+facebookConnectPlugin.setDataProcessingOptions(["LDU"], 1, 1000, function() {
+  console.log('setDataProcessingOptions success');
+}, function() {
+  console.error('setDataProcessingOptions failure');
+});
+```
+
+For more information see: [Facebook Documentation](https://developers.facebook.com/docs/app-events/guides/ccpa)
+
+#### Advanced Matching
+
+With [Advanced Matching](https://developers.facebook.com/docs/app-events/advanced-matching/), Facebook can match conversion events to your customers to optimize your ads and build larger re-marketing audiences.
+
+`setUserData(Object userData, Function success, Function failure)`
+
+- **userData**, an object containing the user data to use for matching
+
+Example user data object:
+
+	{
+		"em": "jsmith@example.com", //email
+		"fn": "john", //first name
+		"ln": "smith", //last name
+		"ph", "16505554444", //phone number
+		"db": "19910526", //birthdate
+		"ge": "f", //gender
+		"ct": "menlopark", //city
+		"st": "ca", //state
+		"zp": "94025", //zip code
+		"cn": "us" //country
+	}
+
+Success function indicates the user data has been set.
+
+Failure function returns an error String.
+
+`clearUserData(Function success, Function failure)`
+
+Success function indicates the user data has been cleared.
+
+Failure function returns an error String.
 
 ### Login
 
@@ -404,7 +506,7 @@ Please check [this repo](https://github.com/msencer/fb_hybrid_app_events_sample)
 
 ## GDPR Compliance
 
-This Plugin supports Facebook's [GDPR Compliance](https://developers.facebook.com/docs/app-events/gdpr-compliance/) **Delaying Automatic Event Collection**.
+This plugin supports Facebook's [GDPR Compliance](https://developers.facebook.com/docs/app-events/gdpr-compliance/) **Delaying Automatic Event Collection**.
 
 In order to enable this feature in your Cordova app, please set the *FACEBOOK_AUTO_LOG_APP_EVENTS* variable to "false" (default is true).
 
@@ -453,6 +555,27 @@ facebookConnectPlugin.setAdvertiserTrackingEnabled(true, function() {
 ```
 
 See the [Facebook Developer documentation](https://developers.facebook.com/docs/app-events/guides/advertising-tracking-enabled/) for more details.
+
+## App Ads and Deep Links
+
+`getDeferredApplink(Function success, Function failure)`
+
+Success function returns the deep link if one is defined.
+
+Failure function returns an error String.
+
+Note that on iOS, you must use a plugin such as [cordova-plugin-idfa](https://www.npmjs.com/package/cordova-plugin-idfa) to first request tracking permission from the user, then call the `setAdvertiserTrackingEnabled` method to enable advertiser tracking. Attempting to call `getDeferredApplink` without doing so will result in an empty string being returned.
+
+```js
+cordova.plugins.idfa.requestPermission().then(function() {
+  facebookConnectPlugin.setAdvertiserTrackingEnabled(true);
+  facebookConnectPlugin.getDeferredApplink(function(url) {
+    console.log('url = ' + url);
+  });
+});
+```
+
+See the [Facebook Developer documentation](https://developers.facebook.com/docs/app-ads/deep-linking/) for more details.
 
 ## URL Suffixes for Multiple Apps
 
