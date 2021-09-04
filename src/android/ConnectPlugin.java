@@ -274,6 +274,14 @@ public class ConnectPlugin extends CordovaPlugin {
             executeSetApplicationId(args, callbackContext);
             return true;
 
+        } else if (action.equals("getClientToken")) {
+            callbackContext.success(FacebookSdk.getClientToken());
+            return true;
+
+        } else if (action.equals("setClientToken")) {
+            executeSetClientToken(args, callbackContext);
+            return true;
+
         } else if (action.equals("getApplicationName")) {
             callbackContext.success(FacebookSdk.getApplicationName());
             return true;
@@ -392,6 +400,22 @@ public class ConnectPlugin extends CordovaPlugin {
             callbackContext.success();
         } catch (JSONException e) {
             callbackContext.error("Error setting application ID");
+        }
+    }
+
+    private void executeSetClientToken(JSONArray args, CallbackContext callbackContext) {
+        if (args.length() == 0) {
+            // Not enough parameters
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        try {
+            String clientToken = args.getString(0);
+            FacebookSdk.setClientToken(clientToken);
+            callbackContext.success();
+        } catch (JSONException e) {
+            callbackContext.error("Error setting client token");
         }
     }
 

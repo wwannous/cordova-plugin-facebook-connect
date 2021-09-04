@@ -19,6 +19,8 @@
 @interface FacebookConnectPlugin : CDVPlugin <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate>
 - (void)getApplicationId:(CDVInvokedUrlCommand *)command;
 - (void)setApplicationId:(CDVInvokedUrlCommand *)command;
+- (void)getClientToken:(CDVInvokedUrlCommand *)command;
+- (void)setClientToken:(CDVInvokedUrlCommand *)command;
 - (void)getApplicationName:(CDVInvokedUrlCommand *)command;
 - (void)setApplicationName:(CDVInvokedUrlCommand *)command;
 - (void)getLoginStatus:(CDVInvokedUrlCommand *)command;
