@@ -1,9 +1,9 @@
 <a name="3.1.1"></a>
 # [3.1.1](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/releases/tag/v3.1.1) (2021-09-07)
 
-## Bug Fixes
+## Breaking Changes
 
-* Dropped support for cordova-android 8 and below (closes [#90](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/90))
+* Updated plugin.xml to indicate that cordova-android >= 9 is required (closes [#90](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/issues/90))
 
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/cordova-plugin-facebook-connect/cordova-plugin-facebook-connect/releases/tag/v3.1.0) (2021-08-31)
