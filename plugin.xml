@@ -184,6 +184,10 @@
           </array>
         </config-file>
 
+        <config-file target="*-Info.plist" parent="FacebookClientToken">
+            <string>$FACEBOOK_CLIENT_TOKEN</string>
+        </config-file>
+
         <!-- Facebook SDK -->
         <podspec>
             <config>
