@@ -118,10 +118,6 @@
             <string>$APP_NAME</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
-            <string>FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
-        </config-file>
-
         <config-file target="*-Info.plist" parent="FacebookAutoLogAppEventsEnabled_PLACEHOLDER">
             <string>FACEBOOK_AUTO_LOG_APP_EVENTS_PLACEHOLDER</string>
         </config-file>
@@ -139,7 +135,7 @@
             <dict>
               <key>CFBundleURLSchemes</key>
               <array>
-                <string>fb$APP_IDFACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
+                <string>fb$APP_ID</string>
                 <string>OTHER_APP_SCHEMES_PLACEHOLDER</string>
               </array>
             </dict>
