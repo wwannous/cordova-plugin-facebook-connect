@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-facebook-connect"
-        version="3.2.1">
+        version="3.2.2">
 
     <name>Facebook Connect</name>
 
@@ -25,8 +25,8 @@
     <preference name="FACEBOOK_AUTO_LOG_APP_EVENTS" default="true" />
     <preference name="FACEBOOK_HYBRID_APP_EVENTS" default="false" />
     <preference name="FACEBOOK_ADVERTISER_ID_COLLECTION" default="true" />
-    <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="11.3.0"/>
-    <preference name="FACEBOOK_IOS_SDK_VERSION" default="11.1.0"/>
+    <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="13.0.0"/>
+    <preference name="FACEBOOK_IOS_SDK_VERSION" default="13.0.0"/>
     <preference name="FACEBOOK_BROWSER_SDK_VERSION" default="v11.0" />
 
     <engines>
@@ -118,6 +118,10 @@
             <string>$APP_NAME</string>
         </config-file>
 
+        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
+            <string>FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
+        </config-file>
+
         <config-file target="*-Info.plist" parent="FacebookAutoLogAppEventsEnabled_PLACEHOLDER">
             <string>FACEBOOK_AUTO_LOG_APP_EVENTS_PLACEHOLDER</string>
         </config-file>
@@ -135,7 +139,7 @@
             <dict>
               <key>CFBundleURLSchemes</key>
               <array>
-                <string>fb$APP_ID</string>
+                <string>fb$APP_IDFACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
                 <string>OTHER_APP_SCHEMES_PLACEHOLDER</string>
               </array>
             </dict>
@@ -183,7 +187,6 @@
         <config-file target="*-Info.plist" parent="FacebookClientToken">
             <string>$FACEBOOK_CLIENT_TOKEN</string>
         </config-file>
-
         <!-- Facebook SDK -->
         <podspec>
             <config>
@@ -193,7 +196,7 @@
                 <pod name="FBSDKCoreKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
                 <pod name="FBSDKLoginKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
                 <pod name="FBSDKShareKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
-                 <pod name="FBSDKGamingServicesKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
+                <pod name="FBSDKGamingServicesKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
             </pods>
         </podspec>
 
