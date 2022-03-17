@@ -26,13 +26,8 @@
     <preference name="FACEBOOK_HYBRID_APP_EVENTS" default="false" />
     <preference name="FACEBOOK_ADVERTISER_ID_COLLECTION" default="true" />
     <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="11.3.0"/>
-    <preference name="FACEBOOK_IOS_SDK_VERSION" default="13.0.0"/>
+    <preference name="FACEBOOK_IOS_SDK_VERSION" default="11.1.0"/>
     <preference name="FACEBOOK_BROWSER_SDK_VERSION" default="v11.0" />
-
-    <preference name="FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER" default="" />
-    <preference name="OTHER_APP_SCHEMES_PLACEHOLDER" default="" />
-    <preference name="FACEBOOK_ADVERTISER_ID_COLLECTION_PLACEHOLDER" default="" />
-    <preference name="FACEBOOK_AUTO_LOG_APP_EVENTS_PLACEHOLDER" default="" />
 
     <engines>
         <engine name="cordova-android" version=">=9.0.0" />
@@ -124,11 +119,11 @@
         </config-file>
 
         <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
-            <string>$FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
+            <string>FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="FacebookAutoLogAppEventsEnabled_PLACEHOLDER">
-            <string>$FACEBOOK_AUTO_LOG_APP_EVENTS_PLACEHOLDER</string>
+            <string>FACEBOOK_AUTO_LOG_APP_EVENTS_PLACEHOLDER</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="FacebookHybridAppEvents">
@@ -136,7 +131,7 @@
         </config-file>
 
         <config-file target="*-Info.plist" parent="FacebookAdvertiserIDCollectionEnabled_PLACEHOLDER">
-            <string>$FACEBOOK_ADVERTISER_ID_COLLECTION_PLACEHOLDER</string>
+            <string>FACEBOOK_ADVERTISER_ID_COLLECTION_PLACEHOLDER</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
@@ -144,8 +139,8 @@
             <dict>
               <key>CFBundleURLSchemes</key>
               <array>
-                <string>fb$APP_ID$FACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
-                <string>$OTHER_APP_SCHEMES_PLACEHOLDER</string>
+                <string>fb$APP_IDFACEBOOK_URL_SCHEME_SUFFIX_PLACEHOLDER</string>
+                <string>OTHER_APP_SCHEMES_PLACEHOLDER</string>
               </array>
             </dict>
           </array>
@@ -189,10 +184,6 @@
           </array>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="FacebookClientToken">
-            <string>$FACEBOOK_CLIENT_TOKEN</string>
-        </config-file>
-
         <!-- Facebook SDK -->
         <podspec>
             <config>
@@ -202,7 +193,7 @@
                 <pod name="FBSDKCoreKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
                 <pod name="FBSDKLoginKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
                 <pod name="FBSDKShareKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
-                <pod name="FBSDKGamingServicesKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
+                 <pod name="FBSDKGamingServicesKit" spec="$FACEBOOK_IOS_SDK_VERSION"/>
             </pods>
         </podspec>
 
